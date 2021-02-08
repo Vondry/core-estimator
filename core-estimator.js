@@ -27,61 +27,6 @@
 	const path = (doc.currentScript || doc.scripts[doc.scripts.length - 1]).src
 		.replace(/\/[^\/]+$/, '/');
 
-	// Use PNaCl in Chrome
-	if (!dom_implemented && navigator.mimeTypes['application/x-pnacl']) {
-		const HTML = 'http://www.w3.org/1999/xhtml';
-		const log_error = console.error.bind(console);
-		const calls = [];
-
-		const on_message = function (event) {
-			/** FIX: Uncaught TypeError: Cannot set property hardwareConcurrency of #<Navigator> which has only a getter **/
-			const cores = /* navigator.hardwareConcurrency = */ event.data;
-			let call;
-
-			navigator.getHardwareConcurrency = function (callback, options) {
-				callback(cores);
-				if (options && options.progress) {
-					options.progress(cores, cores, cores);
-				}
-			};
-
-			while (call = calls.shift()) {
-				navigator.getHardwareConcurrency(call[0], call[1]);
-			}
-
-			// Cleanup
-			listener_div.removeEventListener('load', on_load, true);
-			listener_div.removeEventListener('message', on_message, true);
-			listener_div.removeEventListener('error', log_error, true);
-			listener_div.removeEventListener('crash', log_error, true);
-			doc.documentElement.removeChild(listener_div);
-		};
-
-		const on_load = function () {
-			embed.postMessage(0);
-		};
-
-		navigator.getHardwareConcurrency = function (callback, options) {
-			calls.push([callback, options]);
-		};
-
-		const listener_div = doc.createElementNS(HTML, 'div');
-		listener_div.addEventListener('load', on_load, true);
-		listener_div.addEventListener('message', on_message, true);
-		listener_div.addEventListener('error', log_error, true);
-		listener_div.addEventListener('crash', log_error, true);
-
-		const embed = doc.createElementNS(HTML, 'embed');
-		embed.setAttribute('path', path + 'nacl_module/pnacl/Release');
-		embed.setAttribute('src', path + 'nacl_module/pnacl/Release/cores.nmf');
-		embed.setAttribute('type', 'application/x-pnacl');
-
-		listener_div.appendChild(embed);
-		doc.documentElement.appendChild(listener_div);
-
-		return;
-	}
-
 	// Set up performance testing function
 	const performance = view.performance || Date;
 	if (!performance.now) {
