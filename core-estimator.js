@@ -94,7 +94,7 @@
 	// Path to workload.js is derived from the path of the running script.
 	const workload = path + 'workload.js';
 
-	let previously_run = false;
+	var previously_run = false;
 
 	// Set navigator.hardwareConcurrency to a sane value before getHardwareConcurrency is ever run
 	if (!dom_implemented) {
@@ -120,7 +120,7 @@
 		}
 
 		// If we already have an answer, return early.
-		if (dom_implemented || (options.use_cache && previously_run)) {
+		if (/* dom_implemented || */ (options.use_cache && previously_run)) {
 			callback(navigator.hardwareConcurrency);
 			return;
 		}
