@@ -1,3 +1,5 @@
+# !!! This fork introduces code changes, so that side channel attack is being run always !!!
+
 Core Estimator
 ==============
 
