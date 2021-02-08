@@ -34,7 +34,8 @@
 		const calls = [];
 
 		const on_message = function (event) {
-			const cores = navigator.hardwareConcurrency = event.data;
+			/** FIX: Uncaught TypeError: Cannot set property hardwareConcurrency of #<Navigator> which has only a getter **/
+			const cores = /* navigator.hardwareConcurrency = */ event.data;
 			let call;
 
 			navigator.getHardwareConcurrency = function (callback, options) {
@@ -98,7 +99,8 @@
 
 	// Set navigator.hardwareConcurrency to a sane value before getHardwareConcurrency is ever run
 	if (!dom_implemented) {
-		/** @expose */ navigator.hardwareConcurrency = 1;
+		/** FIX: Uncaught TypeError: Cannot set property hardwareConcurrency of #<Navigator> which has only a getter **/
+		// /** @expose */ navigator.hardwareConcurrency = 1;
 		if (typeof Worker === 'undefined') {
 			// Web workers not supported, effectively single-core
 			dom_implemented = true;
@@ -165,7 +167,9 @@
 
 			// We found an estimate
 			doc.documentElement.style.cursor = '';
-			navigator.hardwareConcurrency = cores;
+
+			/** FIX: Uncaught TypeError: Cannot set property hardwareConcurrency of #<Navigator> which has only a getter **/
+			// navigator.hardwareConcurrency = cores;
 			previously_run = true;
 			callback(cores);
 
