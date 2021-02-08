@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Testing hardwareConcurrency</title>
+</head>
+<body>
+
+<div>
+    Real number of cores: <b id="real">--</b>
+    <br>
+    Estimated cores: <b id="estimated">--</b>
+</div>
+
+<script>
+    document.getElementById('real').innerHTML = navigator.hardwareConcurrency;
+
+    function getCoresNumber() {
+        navigator.getHardwareConcurrency(function (estimatedCores) {
+            document.getElementById('estimated').innerHTML = estimatedCores;
+        });
+    }
+</script>
+<script src="./core-estimator.js" onload="getCoresNumber()"></script>
+
+</body>
+</html>
